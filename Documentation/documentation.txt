@@ -1,0 +1,1 @@
+Documentation is to be placed in this directory. This includes a potential game design document and any other written out documentation relating to the design of the game.
