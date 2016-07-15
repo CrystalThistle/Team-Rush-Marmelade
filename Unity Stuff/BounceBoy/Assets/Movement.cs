@@ -43,7 +43,7 @@ public class Movement : MonoBehaviour
         if (yPos <= -maxYpos + ySize / 2 && yVel < 0)
         {
             yVel *= -1;
-            //yPos = -maxYpos + ySize / 2;
+            yPos = -maxYpos + ySize / 2;
         }
 
         transform.position = new Vector3(xPos, yPos, 0);
