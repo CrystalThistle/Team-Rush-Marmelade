@@ -27,7 +27,7 @@ public class Movement : MonoBehaviour
         xPos = GetComponent<Transform>().transform.position.x;
         yPos = GetComponent<Transform>().transform.position.y;
 
-        maxYpos = gameCamera.nativeResolution.y / 2;
+        maxYpos = gameCamera.nativeResolution.y / 2f;
     }
 
     void Update()
@@ -35,20 +35,83 @@ public class Movement : MonoBehaviour
         xPos += xVel;
         yPos += yVel;
 
-        if (yVel > -10)
+        if (Input.GetKey("left"))
         {
-            yVel -= gravity / 100;
+            if (xVel < -10f)
+            {
+                xVel = -7f;
+            }
+            else
+            {
+                xVel -= 1f;
+            }
         }
 
-        if (yPos <= -maxYpos + ySize / 2 && yVel < 0)
+        if (Input.GetKey("right"))
         {
-            yVel *= -1;
-            yPos = -maxYpos + ySize / 2;
+            if (xVel > 10f)
+            {
+                xVel = 7f;
+            }
+            else
+            {
+                xVel += 1f;
+            }
         }
 
-        transform.position = new Vector3(xPos, yPos, 0);
+        if (yVel > -10f)
+        {
+            yVel -= gravity / 100f;
+        }
+
+        if (yPos <= -maxYpos + ySize / 2f && yVel < 0f)
+        {
+            yVel *= -1f;
+            yPos = -maxYpos + ySize / 2f;
+        }
+
+        transform.position = new Vector3(xPos, yPos, 0f);
 
         prevXPos = xPos;
         prevYPos = yPos;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        GameObject colObject = col.gameObject;
+
+        float colXPos = colObject.GetComponent<Transform>().transform.position.x;
+        float colYPos = colObject.GetComponent<Transform>().transform.position.y;
+        float colXSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        float colYSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+
+        if (colObject.tag == "wall")
+        {
+            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f)
+            {
+                xVel *= -1;
+                xPos = prevXPos;
+                yPos = prevYPos;
+            }
+            else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f)
+            {
+                xVel *= -1;
+                xPos = prevXPos;
+                yPos = prevYPos;
+            }
+
+            if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f)
+            {
+                yVel *= -1;
+                xPos = prevXPos;
+                yPos = prevYPos;
+            }
+            else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f)
+            {
+                yVel *= -1;
+                xPos = prevXPos;
+                yPos = prevYPos;
+            }
+        }
     }
 }
