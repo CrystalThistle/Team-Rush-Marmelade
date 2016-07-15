@@ -7,6 +7,8 @@ public class Movement : MonoBehaviour
     public float yPos;
     public float xVel;
     public float yVel;
+    public float xVelMax = 7f;
+    public float yVelMax = 7f;
     public float gravity;
 
     private float prevXPos;
@@ -37,11 +39,6 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKey("left"))
         {
-            if (xVel < -10f)
-            {
-                xVel = -7f;
-            }
-            else
             {
                 xVel -= 1f;
             }
@@ -49,11 +46,6 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKey("right"))
         {
-            if (xVel > 10f)
-            {
-                xVel = 7f;
-            }
-            else
             {
                 xVel += 1f;
             }
@@ -62,6 +54,24 @@ public class Movement : MonoBehaviour
         if (yVel > -10f)
         {
             yVel -= gravity / 100f;
+        }
+
+        if (xVel < -xVelMax)
+        {
+            xVel = -xVelMax;
+        }
+        else if (xVel > xVelMax)
+        {
+            xVel = xVelMax;
+        }
+
+        if (yVel < -yVelMax)
+        {
+            yVel = -yVelMax;
+        }
+        else if (yVel > yVelMax)
+        {
+            yVel = yVelMax;
         }
 
         if (yPos <= -maxYpos + ySize / 2f && yVel < 0f)
@@ -87,7 +97,8 @@ public class Movement : MonoBehaviour
 
         if (colObject.tag == "wall")
         {
-            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f)
+            
+            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f )
             {
                 xVel *= -1;
                 xPos = prevXPos;
@@ -99,7 +110,6 @@ public class Movement : MonoBehaviour
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
-
             if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f)
             {
                 yVel *= -1;
