@@ -9,12 +9,15 @@ public class Movement : MonoBehaviour
     public float yVel;
     public float xVelMax = 7f;
     public float yVelMax = 7f;
+    public float xSize = 16;
+    public float ySize = 16;
     public float gravity;
+
+    public bool colBot, colTop, colLeft, colRight;
+    public bool hasGravity = false;
 
     private float prevXPos;
     private float prevYPos;
-    private float xSize;
-    private float ySize;
     private float screenWidth;
     private float screenHeight;
 
@@ -56,7 +59,7 @@ public class Movement : MonoBehaviour
             }
         }
 
-        if (yVel > -10f)
+        if (yVel > -10f && hasGravity)
         {
             yVel -= gravity / 100f;
         }
@@ -115,49 +118,56 @@ public class Movement : MonoBehaviour
         // Register previous frame position
         prevXPos = xPos;
         prevYPos = yPos;
+
+        colBot = false;
+        colTop = false;
+        colLeft = false;
+        colRight = false;
     }
 
-    void OnCollisionEnter2D(Collider2D col)
-    {
-        GameObject colObject = col.gameObject;
+    
 
-        float colXPos = colObject.GetComponent<Transform>().transform.position.x;
-        float colYPos = colObject.GetComponent<Transform>().transform.position.y;
-        float colXSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.x;
-        float colYSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+    //void OnTriggerEnter2D(Collider2D col)
+    //{
+    //    GameObject colObject = col.gameObject;
+
+    //    float colXPos = colObject.GetComponent<Transform>().transform.position.x;
+    //    float colYPos = colObject.GetComponent<Transform>().transform.position.y;
+    //    float colXSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+    //    float colYSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y;
         
-        // When colliding with a wall
-        if (colObject.tag == "wall")
-        {
-            // Left side collision
-            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f)
-            {
-                xVel *= -1;
-                xPos = prevXPos;
-                yPos = prevYPos;
-            }
-            // Right side collision
-            else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f)
-            {
-                xVel *= -1;
-                xPos = prevXPos;
-                yPos = prevYPos;
-            }
+    //    // When colliding with a wall
+    //    if (colObject.tag == "wall")
+    //    {
+    //        // Left side collision
+    //        if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f)
+    //        {
+    //            xVel *= -1;
+    //            xPos = prevXPos;
+    //            yPos = prevYPos;
+    //        }
+    //        // Right side collision
+    //        else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f)
+    //        {
+    //            xVel *= -1;
+    //            xPos = prevXPos;
+    //            yPos = prevYPos;
+    //        }
 
-            // Bottom side collision
-            if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f)
-            {
-                yVel *= -1;
-                xPos = prevXPos;
-                yPos = prevYPos;
-            }
-            // Top side collision
-            else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f)
-            {
-                yVel *= -1;
-                xPos = prevXPos;
-                yPos = prevYPos;
-            }
-        }
-    }
+    //        // Bottom side collision
+    //        if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f)
+    //        {
+    //            yVel *= -1;
+    //            xPos = prevXPos;
+    //            yPos = prevYPos;
+    //        }
+    //        // Top side collision
+    //        else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f)
+    //        {
+    //            yVel *= -1;
+    //            xPos = prevXPos;
+    //            yPos = prevYPos;
+    //        }
+    //    }
+    //}
 }
