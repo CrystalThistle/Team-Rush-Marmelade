@@ -8,14 +8,16 @@ public class PlayerPhysics : MonoBehaviour
 
     private float xVelMax = 500f;
     private float yVelMax = 500f;
-    private bool onGround;
+    private bool onGround = false;
     private Rigidbody2D myBody;
+    private BoxCollider2D collider2D;
     private float bounce;
 
     void Start()
     {
         bounce = gameObject.GetComponent<BoxCollider2D>().sharedMaterial.bounciness;
         myBody = gameObject.GetComponent<Rigidbody2D>();
+        collider2D = gameObject.GetComponent<BoxCollider2D>();
 	}
 	
 	void Update()
@@ -23,6 +25,18 @@ public class PlayerPhysics : MonoBehaviour
         // Debug
         myVelocity = myBody.velocity;
 
+        if (Input.GetKey("space"))
+        {
+            if (onGround)
+            {
+                myBody.velocity = new Vector2(myBody.velocity.x, 30f);
+                collider2D.sharedMaterial.bounciness = 1f;
+
+                collider2D.enabled = false;
+                collider2D.enabled = true;
+            }
+
+        }
         // Moving left
         if (Input.GetKey("left"))
         {
@@ -41,7 +55,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             if (onGround)
             {
-
+  
             }
             else
             {
@@ -51,16 +65,32 @@ public class PlayerPhysics : MonoBehaviour
 
         // Clamp velocity
         myBody.velocity = new Vector2(Mathf.Clamp(myBody.velocity.x, -xVelMax, xVelMax), Mathf.Clamp(myBody.velocity.y, -yVelMax, yVelMax));
-
+        if (!onGround)
+        {
+            if (Input.GetKey("space"))
+            {
+                
+            }
+        }
         // Jumping / Bouncing
         if (Input.GetKey("space"))
         {
             myBody.gravityScale = 0f;
+            collider2D.sharedMaterial.bounciness = 1f;
+
+            collider2D.enabled = false;
+            collider2D.enabled = true;
+            onGround = true;
         }
         else
         {
             myBody.gravityScale = 30f;
-            bounce = 0f;
+            collider2D.sharedMaterial.bounciness = 0f;
+            
+            collider2D.enabled = false;
+            collider2D.enabled = true;
+            onGround = false;
+
         }
 	}
 }
