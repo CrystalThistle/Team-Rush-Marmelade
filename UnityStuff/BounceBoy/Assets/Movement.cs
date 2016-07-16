@@ -39,7 +39,7 @@ public class Movement : MonoBehaviour
         // Update position based on velocity
         xPos += xVel;
         yPos += yVel;
-
+        
         // Left player movement
         if (Input.GetKey("left"))
         {
@@ -84,28 +84,28 @@ public class Movement : MonoBehaviour
         // Left screen border collision
         if (xPos <= -screenWidth + xSize / 2f && xVel < 0f)
         {
-            xVel *= -1f;
+            xVel = -xVel;
             xPos = -screenWidth + xSize / 2f;
         }
 
         // Right screen border collision
         if (xPos >= screenWidth - xSize / 2f && xVel > 0f)
         {
-            xVel *= -1f;
+            xVel = -xVel;
             xPos = screenWidth - xSize / 2f;
         }
 
         // Bottom screen border collision
         if (yPos <= -screenHeight + ySize / 2f && yVel < 0f)
         {
-            yVel *= -1f;
+            yVel = -yVel;
             yPos = -screenHeight + ySize / 2f;
         }
 
         // Top screen border collision
         if (yPos >= screenHeight - ySize / 2f && yVel > 0f)
         {
-            yVel *= -1f;
+            yVel = -yVel;
             yPos = screenHeight - ySize / 2f;
         }
 
@@ -117,7 +117,7 @@ public class Movement : MonoBehaviour
         prevYPos = yPos;
     }
 
-    void OnCollisionEnter2D(Collider2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
         GameObject colObject = col.gameObject;
 
@@ -132,14 +132,14 @@ public class Movement : MonoBehaviour
             // Left side collision
             if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f)
             {
-                xVel *= -1;
+                xVel = -xVel;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
             // Right side collision
             else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f)
             {
-                xVel *= -1;
+                xVel = -xVel;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
@@ -147,14 +147,16 @@ public class Movement : MonoBehaviour
             // Bottom side collision
             if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f)
             {
-                yVel *= -1;
+                yVel = -yVel;
+                xVel = -xVel;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
             // Top side collision
             else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f)
             {
-                yVel *= -1;
+                yVel = -yVel;
+                xVel = -xVel;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
