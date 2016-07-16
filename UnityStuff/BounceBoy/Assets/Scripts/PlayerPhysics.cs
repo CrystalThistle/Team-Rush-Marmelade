@@ -10,14 +10,14 @@ public class PlayerPhysics : MonoBehaviour
     private float yVelMax = 500f;
     private bool onGround = false;
     private Rigidbody2D myBody;
-    private BoxCollider2D collider2D;
+    private BoxCollider2D myCollider;
     private float bounce;
 
     void Start()
     {
         bounce = gameObject.GetComponent<BoxCollider2D>().sharedMaterial.bounciness;
         myBody = gameObject.GetComponent<Rigidbody2D>();
-        collider2D = gameObject.GetComponent<BoxCollider2D>();
+        myCollider = gameObject.GetComponent<BoxCollider2D>();
 	}
 	
 	void Update()
@@ -30,10 +30,10 @@ public class PlayerPhysics : MonoBehaviour
             if (onGround)
             {
                 myBody.velocity = new Vector2(myBody.velocity.x, 30f);
-                collider2D.sharedMaterial.bounciness = 1f;
+                myCollider.sharedMaterial.bounciness = 1f;
 
-                collider2D.enabled = false;
-                collider2D.enabled = true;
+                myCollider.enabled = false;
+                myCollider.enabled = true;
             }
 
         }
@@ -76,19 +76,19 @@ public class PlayerPhysics : MonoBehaviour
         if (Input.GetKey("space"))
         {
             myBody.gravityScale = 0f;
-            collider2D.sharedMaterial.bounciness = 1f;
+            myCollider.sharedMaterial.bounciness = 1f;
 
-            collider2D.enabled = false;
-            collider2D.enabled = true;
+            myCollider.enabled = false;
+            myCollider.enabled = true;
             onGround = true;
         }
         else
         {
             myBody.gravityScale = 30f;
-            collider2D.sharedMaterial.bounciness = 0f;
-            
-            collider2D.enabled = false;
-            collider2D.enabled = true;
+            myCollider.sharedMaterial.bounciness = 0f;
+
+            myCollider.enabled = false;
+            myCollider.enabled = true;
             onGround = false;
 
         }
