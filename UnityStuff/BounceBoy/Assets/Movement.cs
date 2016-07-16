@@ -86,7 +86,7 @@ public class Movement : MonoBehaviour
         prevYPos = yPos;
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+    void OnCollisionEnter2D(Collider2D col)
     {
         GameObject colObject = col.gameObject;
 
@@ -97,26 +97,26 @@ public class Movement : MonoBehaviour
 
         if (colObject.tag == "wall")
         {
-            
-            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f )
+            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f && Input.GetKey("left"))
             {
                 xVel *= -1;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
-            else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f)
+            else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f && Input.GetKey("right"))
             {
                 xVel *= -1;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
-            if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f)
+
+            if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f  && Input.GetKey("right"))
             {
                 yVel *= -1;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
-            else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f)
+            else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f  && Input.GetKey("left"))
             {
                 yVel *= -1;
                 xPos = prevXPos;
