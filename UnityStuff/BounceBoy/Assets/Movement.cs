@@ -15,7 +15,8 @@ public class Movement : MonoBehaviour
     private float prevYPos;
     private float xSize;
     private float ySize;
-    private float maxYpos;
+    private float screenWidth;
+    private float screenHeight;
 
     private PixelPerfectCamera gameCamera;
 
@@ -29,14 +30,17 @@ public class Movement : MonoBehaviour
         xPos = GetComponent<Transform>().transform.position.x;
         yPos = GetComponent<Transform>().transform.position.y;
 
-        maxYpos = gameCamera.nativeResolution.y / 2f;
+        screenWidth = gameCamera.nativeResolution.x / 2f;
+        screenHeight = gameCamera.nativeResolution.y / 2f;
     }
 
     void Update()
     {
+        // Update position based on velocity
         xPos += xVel;
         yPos += yVel;
 
+        // Left player movement
         if (Input.GetKey("left"))
         {
             {
@@ -44,6 +48,7 @@ public class Movement : MonoBehaviour
             }
         }
 
+        // Right player movement
         if (Input.GetKey("right"))
         {
             {
@@ -56,6 +61,7 @@ public class Movement : MonoBehaviour
             yVel -= gravity / 100f;
         }
 
+        // Horizontal speed limits
         if (xVel < -xVelMax)
         {
             xVel = -xVelMax;
@@ -65,6 +71,7 @@ public class Movement : MonoBehaviour
             xVel = xVelMax;
         }
 
+        // Vertical speed limits
         if (yVel < -yVelMax)
         {
             yVel = -yVelMax;
@@ -74,14 +81,38 @@ public class Movement : MonoBehaviour
             yVel = yVelMax;
         }
 
-        if (yPos <= -maxYpos + ySize / 2f && yVel < 0f)
+        // Left screen border collision
+        if (xPos <= -screenWidth + xSize / 2f && xVel < 0f)
         {
-            yVel *= -1f;
-            yPos = -maxYpos + ySize / 2f;
+            xVel *= -1f;
+            xPos = -screenWidth + xSize / 2f;
         }
 
+        // Right screen border collision
+        if (xPos >= screenWidth - xSize / 2f && xVel > 0f)
+        {
+            xVel *= -1f;
+            xPos = screenWidth - xSize / 2f;
+        }
+
+        // Bottom screen border collision
+        if (yPos <= -screenHeight + ySize / 2f && yVel < 0f)
+        {
+            yVel *= -1f;
+            yPos = -screenHeight + ySize / 2f;
+        }
+
+        // Top screen border collision
+        if (yPos >= screenHeight - ySize / 2f && yVel > 0f)
+        {
+            yVel *= -1f;
+            yPos = screenHeight - ySize / 2f;
+        }
+
+        // Apply position transform values
         transform.position = new Vector3(xPos, yPos, 0f);
 
+        // Register previous frame position
         prevXPos = xPos;
         prevYPos = yPos;
     }
@@ -94,29 +125,34 @@ public class Movement : MonoBehaviour
         float colYPos = colObject.GetComponent<Transform>().transform.position.y;
         float colXSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.x;
         float colYSize = colObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y;
-
+        
+        // When colliding with a wall
         if (colObject.tag == "wall")
         {
-            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f && Input.GetKey("left"))
+            // Left side collision
+            if (prevXPos - xSize / 2f >= colXPos + colXSize / 2f)
             {
                 xVel *= -1;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
-            else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f && Input.GetKey("right"))
+            // Right side collision
+            else if (prevXPos + xSize / 2f <= colXPos + colXSize / 2f)
             {
                 xVel *= -1;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
 
-            if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f  && Input.GetKey("right"))
+            // Bottom side collision
+            if (prevYPos - ySize / 2f >= colYPos + colYSize / 2f)
             {
                 yVel *= -1;
                 xPos = prevXPos;
                 yPos = prevYPos;
             }
-            else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f  && Input.GetKey("left"))
+            // Top side collision
+            else if (prevYPos + ySize / 2f <= colYPos - colYSize / 2f)
             {
                 yVel *= -1;
                 xPos = prevXPos;
