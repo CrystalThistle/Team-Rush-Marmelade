@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class SelectionScript : MonoBehaviour {
-
+public class SelectionScript : MonoBehaviour
+{
     public int optionAmount;
     public float posX;
     public float posY;
@@ -14,19 +15,15 @@ public class SelectionScript : MonoBehaviour {
     private float targetY;
 
 	// Use this for initialization
-	void Start (int posX, int posY, int optionAmount, float optionOffset, string EditResponsesInScript) {
+	void Start()
+    {
         this.posX = GetComponent<Transform>().transform.position.x + posX;
         this.posY = GetComponent<Transform>().transform.position.y + posY;
-
-        originX = posX;
-        originY = posY;
-
-        this.optionAmount = optionAmount;
-        this.optionOffset = optionOffset;
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update()
+    {
         if (Input.GetKeyDown(KeyCode.Return))
         {
             switch (curOption)
@@ -34,10 +31,10 @@ public class SelectionScript : MonoBehaviour {
                 // One case per option,
                 // responds when enter is pressed
                 case 0:
-                    Application.LoadLevel(1);
+                    SceneManager.LoadScene(1);
                     break;
                 case 1:
-                    Application.Quit;
+                    Application.Quit();
                     break;
             }
         }
